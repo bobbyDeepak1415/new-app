@@ -9,18 +9,24 @@ const Demo = () => {
     "https://jsonplaceholder.typicode.com/comments",
   );
 
-const startIndex=page*Page_size
+  const startIndex = page * Page_size;
 
-  const filteredComments=allComments.slice(startIndex,startIndex+Page_size)
+  const filteredComments = allComments.slice(
+    startIndex,
+    startIndex + Page_size,
+  );
 
-  const handleBackClick=()=>{
+  const handleBackClick = () => {
+    if (page > 0) {
+      setPage((page) => page - 1);
+    }
+  };
 
-  }
-
-  const handleForwrdClick=()=>{
-
-  }
-
+  const handleForwrdClick = () => {
+    if (startIndex + Page_size <= allComments.length) {
+      setPage((page) => page + 1);
+    }
+  };
 
   return (
     <div>
@@ -31,14 +37,18 @@ const startIndex=page*Page_size
             return <li key={comment.id}>{comment.name}</li>;
           })}
         </ol>
-        <button onClick={handleBackClick}>back</button>
-        <button onClick={handleForwrdClick}>Forward</button>
+        <button disabled={page === 0} onClick={handleBackClick}>
+          back
+        </button>
+        <button
+          disabled={startIndex + Page_size >= allComments.length}
+          onClick={handleForwrdClick}
+        >
+          Forward
+        </button>
       </div>
     </div>
   );
 };
-
-
-
 
 export default Demo;
