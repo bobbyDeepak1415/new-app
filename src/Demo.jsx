@@ -1,20 +1,42 @@
+import { useState } from "react";
 import useFetchComments from "./useFetchComments";
 
+const Page_size = 10;
 const Demo = () => {
+  const [page, setPage] = useState(0);
 
-  const {  comments:allComments } = useFetchComments(
+  const { comments: allComments } = useFetchComments(
     "https://jsonplaceholder.typicode.com/comments",
   );
+
+  const startIndex = page * Page_size;
+
+  const filteredComments = allComments.slice(
+    startIndex,
+    startIndex + Page_size,
+  );
+
+  const handleClickBack = () => {};
+  const handleClickForward = () => {};
 
   return (
     <div>
       <h2>Comments</h2>
       <div>
-        <ul>
-          {allComments.map((comment) => {
+        <ol start={page * Page_size + 1}>
+          {filteredComments.map((comment) => {
             return <li key={comment.id}>{comment.name}</li>;
           })}
-        </ul>
+        </ol>
+        <button disabled={page === 0} onClick={handleClickBack}>
+          backWard
+        </button>
+        <button
+          disabled={page + Page_size >= allComments.length}
+          onClick={handleClickForward}
+        >
+          Forward
+        </button>
       </div>
     </div>
   );
