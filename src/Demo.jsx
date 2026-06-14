@@ -1,54 +1,104 @@
-import { useState } from "react";
-import useFetchComments from "./useFetchComments";
+import React, { useState, useEffect } from "react";
+import useFetchData from "./useFetchData";
 
-const Page_size = 10;
-const Demo = () => {
-  const [page, setPage] = useState(0);
+export default function Demo() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
 
-  const { comments: allComments } = useFetchComments(
-    "https://jsonplaceholder.typicode.com/comments",
-  );
+  // Local debounce handling
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(searchTerm);
+    }, 400);
 
-  const startIndex = page * Page_size;
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchTerm]);
 
-  const filteredComments = allComments.slice(
-    startIndex,
-    startIndex + Page_size,
-  );
-
-  const handleBackClick = () => {
-    if (page > 0) {
-      setPage((page) => page - 1);
-    }
-  };
-
-  const handleForwrdClick = () => {
-    if (startIndex + Page_size <= allComments.length) {
-      setPage((page) => page + 1);
-    }
-  };
+  // Consume hook with the debounced query string
+  const { results, isLoading, error } = useFetchData(debouncedQuery);
 
   return (
-    <div>
-      <h2>Comments</h2>
-      <div>
-        <ol start={page * Page_size + 1}>
-          {filteredComments.map((comment) => {
-            return <li key={comment.id}>{comment.name}</li>;
-          })}
-        </ol>
-        <button disabled={page === 0} onClick={handleBackClick}>
-          back
-        </button>
-        <button
-          disabled={startIndex + Page_size >= allComments.length}
-          onClick={handleForwrdClick}
-        >
-          Forward
-        </button>
+    <div
+      style={{ padding: "20px", maxWidth: "400px", fontFamily: "sans-serif" }}
+    >
+      <label
+        htmlFor="product-search"
+        style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}
+      >
+        Search Products
+      </label>
+      <input
+        id="product-search"
+        type="text"
+        placeholder="Type to search products (e.g., phone, laptop)..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{
+          width: "100%",
+          padding: "10px",
+          fontSize: "16px",
+          borderRadius: "4px",
+          border: "1px solid #ccc",
+          boxSizing: "border-box",
+        }}
+      />
+
+      {/* UI State Blocks */}
+      <div style={{ marginTop: "15px" }}>
+        {isLoading && <p style={{ color: "#666" }}>Loading products...</p>}
+        {error && <p style={{ color: "red" }}>Error: {error}</p>}
+
+        {!isLoading && !error && results.length > 0 && (
+          <ul style={{ listStyleType: "none", padding: 0 }}>
+            {results.map((product) => (
+              <li
+                key={product.id}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "10px 0",
+                  borderBottom: "1px solid #eee",
+                }}
+              >
+                <img
+                  src={product.thumbnail}
+                  alt={product.title}
+                  style={{
+                    width: "50px",
+                    height: "50px",
+                    objectFit: "cover",
+                    borderRadius: "4px",
+                    marginRight: "12px",
+                  }}
+                />
+                <div>
+                  <h4 style={{ margin: "0 0 4px 0", fontSize: "15px" }}>
+                    {product.title}
+                  </h4>
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: "13px",
+                      color: "#2ecc71",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    ${product.price}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {!isLoading && !error && results.length === 0 && (
+          <p style={{ color: "#999" }}>
+            No products found matching "{debouncedQuery}"
+          </p>
+        )}
       </div>
     </div>
   );
-};
-
-export default Demo;
+}
