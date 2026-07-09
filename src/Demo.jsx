@@ -1,29 +1,28 @@
-import React from 'react'
-import useFetchData from './useFetchData';
+import React, { useState } from "react";
+import useFetchData from "./useFetchData";
 
-
-let PAGE_SIZE=10
+let PAGE_SIZE = 10;
 
 const Demo = () => {
+  const [page, setPage] = useState(0);
 
   const url = "https://jsonplaceholder.typicode.com/comments";
 
-  const {allComments}=useFetchData(url)
+  const { allComments } = useFetchData(url);
 
-  const startIndex=0
+  const startIndex = page * PAGE_SIZE;
 
-  const currentComments=allComments.slice()
-
+  const currentComments = allComments.slice(startIndex, startIndex + PAGE_SIZE);
 
   return (
     <div>
-      
-      <ol>{allComments.map((comment)=>{
-        return <li key={comment.id}>{comment.name}</li>
-      })}</ol>
-
+      <ol>
+        {currentComments.map((comment) => {
+          return <li key={comment.id}>{comment.name}</li>;
+        })}
+      </ol>
     </div>
-  )
-}
+  );
+};
 
-export default Demo
+export default Demo;
