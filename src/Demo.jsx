@@ -14,29 +14,36 @@ const Demo = () => {
 
   const currentComments = allComments.slice(startIndex, startIndex + PAGE_SIZE);
 
-
-  const handleBackClick=()=>{
-
-  }
+  const handleBackClick = () => {
+    if (page > 0) {
+      setPage((prev) => prev - 1);
+    }
+  };
+  const handleNextClick = () => {
+    if (startIndex + PAGE_SIZE <= allComments.length) {
+      setPage((prev) => prev + 1);
+    }
+  };
 
   return (
     <div>
-      <ol>
+      <ol start={page * PAGE_SIZE + 1}>
         {currentComments.map((comment) => {
           return <li key={comment.id}>{comment.name}</li>;
         })}
       </ol>
 
       <div>
-        <button disabled={page === 0} onClick={()=>handleBackClick()}>
+        <button disabled={page === 0} onClick={() => handleBackClick()}>
           Prev
         </button>
         <button
           disabled={startIndex + PAGE_SIZE >= allComments.length}
-          onClick={()=>handleBackClick()}
+          onClick={() => handleNextClick()}
         >
-          Back
+          Next
         </button>
+        <p>{page}</p>
       </div>
     </div>
   );
