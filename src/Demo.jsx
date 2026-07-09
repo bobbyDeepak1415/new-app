@@ -14,6 +14,11 @@ const Demo = () => {
 
   const currentComments = allComments.slice(startIndex, startIndex + PAGE_SIZE);
 
+
+  const handleBackClick=()=>{
+
+  }
+
   return (
     <div>
       <ol>
@@ -21,6 +26,18 @@ const Demo = () => {
           return <li key={comment.id}>{comment.name}</li>;
         })}
       </ol>
+
+      <div>
+        <button disabled={page === 0} onClick={()=>handleBackClick()}>
+          Prev
+        </button>
+        <button
+          disabled={startIndex + PAGE_SIZE >= allComments.length}
+          onClick={()=>handleBackClick()}
+        >
+          Back
+        </button>
+      </div>
     </div>
   );
 };
