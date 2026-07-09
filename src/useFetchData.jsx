@@ -15,6 +15,8 @@ const useFetchData = (url) => {
     };
 
     fetchComments();
+
+    return ()=>setComments([])
   }, [url]);
 
   return { allComments };
