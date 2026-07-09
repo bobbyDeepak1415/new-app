@@ -12,9 +12,18 @@ const Demo = () => {
 
   const currentComments = allComments.slice(startIndex, startIndex + PAGE_SIZE);
 
-  const handlePrevClick = () => {};
+  const handlePrevClick = () => {
 
-  const handleNextClick = () => {};
+    if(page>0){
+      setPage(prev=>prev-1)
+    }
+  };
+
+  const handleNextClick = () => {
+    if (page+PAGE_SIZE<=allComments.length) {
+      setPage((prev) => prev + 1);
+    }
+  };
 
   return (
     <div>
