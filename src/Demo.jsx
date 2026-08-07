@@ -9,6 +9,11 @@ const Demo = () => {
 
   return <div>
     <h2>Your comments ere:</h2>
+    <ul>
+      {comments.map((comment)=>{
+        return <li key={comment.id}>{comment.name}</li>
+      })}
+    </ul>
   </div>;
 };
 

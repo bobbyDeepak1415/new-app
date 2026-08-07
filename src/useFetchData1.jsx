@@ -7,7 +7,7 @@ const useFetchData1 = (url) => {
     const fetchData = async () => {
       const response = await fetch(url);
       const res = await response.json();
-      setComments(res.comments);
+      setComments(res);
     };
     fetchData();
   }, [url]);
