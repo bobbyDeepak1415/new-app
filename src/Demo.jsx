@@ -1,19 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import useFetchData1 from "./useFetchData1";
+
+
+let PAGE_SIZE=20
+
 
 const Demo = () => {
 
   const url = "https://jsonplaceholder.typicode.com/comments";
 
+  const [page,setPage]=useState(1)
+
   const {comments}=useFetchData1(url)
+
+  let startIndex=PAGE_SIZE*page
+
+  const currentComments=comments.slice(startIndex,startIndex+PAGE_SIZE)
+
+  const handlePrevClick=()=>{
+
+  }
+
+  const handleNextClick=()=>{
+    
+  }
 
   return <div>
     <h2>Your comments ere:</h2>
     <ul>
-      {comments.map((comment)=>{
+      {currentComments.map((comment)=>{
         return <li key={comment.id}>{comment.name}</li>
       })}
     </ul>
+    <button disabled={page===1} onClick={handlePrevClick}>prev</button>
+    <button disabled={startIndex*PAGE_SIZE>comments.length} onClick={handleNextClick}>Next</button>
   </div>;
 };
 
