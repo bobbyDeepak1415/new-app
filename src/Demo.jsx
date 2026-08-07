@@ -29,16 +29,16 @@ const Demo = () => {
   return (
     <div>
       <h2>Your comments ere:</h2>
-      <ul>
+      <ol start={page * PAGE_SIZE}>
         {currentComments.map((comment) => {
           return <li key={comment.id}>{comment.name}</li>;
         })}
-      </ul>
+      </ol>
       <button disabled={page === 0} onClick={handlePrevClick}>
         prev
       </button>
       <button
-        disabled={startIndex * PAGE_SIZE > comments.length}
+        disabled={startIndex * PAGE_SIZE >= comments.length}
         onClick={handleNextClick}
       >
         Next
