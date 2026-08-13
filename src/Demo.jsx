@@ -12,15 +12,14 @@ const Demo = () => {
       try{
 
         const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/comments",
+          "https://jsonpl...aceholder.typicode.com/comments",
         );
-        if(!response.ok){
-          throw new Error("something went wrong...")
-        }
         
         setAllComments(response.data);
       }catch(err){
         setError(err)
+      }finally{
+        setIsLoading(false)
       }
     };
 
@@ -32,6 +31,7 @@ const Demo = () => {
       <h1>Comments</h1>
 
 {isLoading && <h2>Loading...</h2>}
+{error && <h2>"something went wrong"</h2>}
 
       <ul>
 
